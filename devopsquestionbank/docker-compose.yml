@@ -9,7 +9,7 @@ services:
       - ./frontend:/app
       - /app/node_modules
     environment:
-      - VITE_API_URL=http://localhost:4000/api
+      - VITE_API_URL=http://localhost:4001/api
     depends_on:
       - backend
 
@@ -18,7 +18,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     ports:
-      - "4000:4000"
+      - "4001:4000"
     volumes:
       - ./backend:/app
       - /app/node_modules
