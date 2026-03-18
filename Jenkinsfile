@@ -3,29 +3,24 @@ pipeline {
 
     environment {
         // You can set environment variables here if needed
-        COMPOSE_PROJECT_NAME = "pblpystock"
+        COMPOSE_PROJECT_NAME = "devops-ques-bank"
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // This checks out the code from the Git repository 
-                checkout scm
-            }
-        }
-
         stage('Build & Deploy Containers') {
             steps {
                 // This stops any running containers, rebuilds the images, and starts them up again in detached mode
-                bat 'docker-compose down'
-                bat 'docker-compose up --build -d'
+                dir('devopsquestionbank') {
+                    bat 'docker-compose -p devops-ques-bank down'
+                    bat 'docker-compose -p devops-ques-bank up --build -d'
+                }
             }
         }
 
         stage('Verify Deployment') {
             steps {
                 // Quick check to see if containers are up and running
-                bat 'docker ps | findstr pblpystock'
+                bat 'docker ps | findstr devops-ques-bank'
             }
         }
     }
