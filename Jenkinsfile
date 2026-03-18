@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        // You can set environment variables here if needed
+        COMPOSE_PROJECT_NAME = "pblpystock"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // This checks out the code from the Git repository 
+                checkout scm
+            }
+        }
+
+        stage('Build & Deploy Containers') {
+            steps {
+                // This stops any running containers, rebuilds the images, and starts them up again in detached mode
+                bat 'docker-compose down'
+                bat 'docker-compose up --build -d'
+            }
+        }
+
+        stage('Verify Deployment') {
+            steps {
+                // Quick check to see if containers are up and running
+                bat 'docker ps | findstr pblpystock'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline execution finished.'
+        }
+        success {
+            echo 'Deployment was successful! Your app is now running.'
+        }
+        failure {
+            echo 'Deployment failed! Check the Jenkins console output for errors.'
+        }
+    }
+}
