@@ -17,8 +17,10 @@ pipeline {
         stage('Build & Deploy Containers') {
             steps {
                 // This stops any running containers, rebuilds the images, and starts them up again in detached mode
-                bat 'docker-compose down'
-                bat 'docker-compose up --build -d'
+                dir('devopsquestionbank') {
+                    bat 'docker-compose down'
+                    bat 'docker-compose up --build -d'
+                }
             }
         }
 
